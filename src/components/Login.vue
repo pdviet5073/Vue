@@ -26,7 +26,6 @@
                 </b-form-group>
                 <span> {{ errors[0] }}</span>
             </ValidationProvider>
-
             <div>
                 <b-button type="submit" variant="primary">Submit</b-button>
                 <b-button type="reset" variant="danger">Reset</b-button>
