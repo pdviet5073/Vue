@@ -5,21 +5,28 @@ import router from './router'
 import { BootstrapVue } from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import i18n from './i18n';
 import App from './App.vue'
-import { extend } from 'vee-validate';
-import * as rules from 'vee-validate/dist/rules';
-import { messages } from 'vee-validate/dist/locale/en.json';
 
-Object.keys(rules).forEach(rule => {
-  extend(rule, {
-    ...rules[rule], // copies rule configuration
-    message: messages[rule] // assign message
-  });
-});
 Vue.use(BootstrapVue)
 Vue.config.productionTip = false
 
+Vue.directive("bg",{
+  bind(el, binding){
+      let delay = 0
+        if(binding.modifiers=="delay"){
+          delay =2000
+      }
+      const arg = binding.arg
+      setTimeout(() => {
+          el.style[arg] = binding.value
+      }, delay);
+  }
+})
+
+
 new Vue({
+  i18n,
   router,
   store,
   render: h => h(App),

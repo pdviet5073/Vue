@@ -1,75 +1,113 @@
 <template>
     <div class="login">
-        <b-form @submit.prevent="onSubmit" @reset="onReset">
-            <ValidationProvider rules="required" v-slot="{ errors }">
-                <b-form-group id="input-group-1" label="User name:" label-for="input-1">
-                    <b-form-input
-                        id="input-1"
-                        v-model="initialValue.userName"
-                        name="userName"
+        <ValidationObserver ref="form" v-slot="{ invalid, handleSubmit }" slim>
+            <b-form @submit.prevent="handleSubmit(onSubmit)" @reset="onReset">
+                <ValidationProvider tag="div" name="userName" rules="required" v-slot="{ errors, valid }">
+                    <CustomInput
+                        label="User name:"
+                        labelFor="userName"
+                        :value="initialValue.userName"
+                        @input="initialValue.userName = $event"
                         type="text"
+                        :errors="errors"
+                        :valid="valid"
                         placeholder="User name"
-                    ></b-form-input>
-                </b-form-group>
-                <span>{{ errors[0] }}</span>
-            </ValidationProvider>
+                    />
+                </ValidationProvider>
+                <ValidationProvider
+                    tag="div"
+                    name="Phone"
+                    rules="required|phoneNumber"
+                    v-slot="{ errors, valid }"
+                >
+                    <CustomInput
+                        label="Phone Number:"
+                        labelFor="phone"
+                        :value="initialValue.phone"
+                        @input="initialValue.phone = $event"
+                        type="text"
+                        :errors="errors"
+                        :valid="valid"
+                    />
+                </ValidationProvider>
 
-            <ValidationProvider rules="required" v-slot="{ errors }">
-                <b-form-group id="input-group-2" label="Password:" label-for="input-2">
-                    <b-form-input
-                        id="input-2"
+                <ValidationProvider
+                    tag="div"
+                    name="password"
+                    rules="required|min:6"
+                    v-slot="{ errors, valid }"
+                >
+                    <CustomInput
+                        label="Password:"
+                        labelFor="password"
+                        :value="initialValue.password"
+                        @input="initialValue.password = $event"
                         type="password"
-                        name="password"
-                        v-model="initialValue.password"
-                        placeholder="Password"
-                    ></b-form-input>
-                </b-form-group>
-                <span> {{ errors[0] }}</span>
-            </ValidationProvider>
-            <div>
-                <b-button type="submit" variant="primary">Submit</b-button>
-                <b-button type="reset" variant="danger">Reset</b-button>
-            </div>
-            <p v-if="auth">{{ auth.userName }}</p>
-        </b-form>
+                        :errors="errors"
+                        :valid="valid"
+                    />
+                </ValidationProvider>
+                <div>
+                    <b-button type="submit" variant="primary" :disabled="invalid">Submit</b-button>
+                    <b-button type="reset" variant="danger">Reset</b-button>
+                </div>
+                <p v-if="auth">{{ auth.userName }}</p>
+            </b-form>
+        </ValidationObserver>
     </div>
 </template>
 
 <script>
 import { mapActions, mapState } from "vuex";
-import { ValidationProvider } from "vee-validate/dist/vee-validate.full.esm";
+import CustomInput from "./CustomInput.vue";
+import { extend, ValidationProvider, ValidationObserver } from "vee-validate";
+
+extend("phoneNumber", {
+    validate: (value) => {
+        const regex = /(84|0[3|5|7|8|9])+([0-9]{8})\b/g;
+        return regex.test(value);
+    },
+    message: "This {_field_} is invalid",
+});
 
 export default {
     name: "login",
     data() {
         return {
             initialValue: {
-                userName: "",
-                password: "",
+                userName: null,
+                password: null,
+                phone: null,
             },
         };
     },
     components: {
         ValidationProvider,
+        ValidationObserver,
+        CustomInput,
     },
     computed: mapState({
         auth: (state) => state.logIn.dataUser,
     }),
     methods: {
-        ...mapActions(["logIn"]),
+        ...mapActions(["logIn", "register"]),
 
-        onSubmit() {
-            const { userName, password } = this.initialValue;
+        onSubmit(e) {
+            console.log(this.initialValue, e);
+
+            const { userName, password, phone } = this.initialValue;
             this.logIn({
-                userName: userName.trim(),
-                password: password.trim(),
+                userName: userName,
+                password: password,
+                phone: phone,
             });
+            this.onReset();
         },
-        onReset(event) {
-            event.preventDefault();
+        onReset() {
             // Reset our form values
-            this.form.userName = "";
-            this.form.name = "";
+            this.$nextTick(() => {
+                this.$refs.form.reset();
+            });
         },
     },
     watch: {

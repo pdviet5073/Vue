@@ -29,7 +29,9 @@
                     <div class="todo__item--btn">
                         <button
                             class="button btn-warning"
-                            @click="[(selectTodoUpdate = todo.id), (title = todo.title)]"
+                            @click="
+                                [(selectTodoUpdate = todo.id), (title = todo.title), (price = todo.price)]
+                            "
                         >
                             Update
                         </button>

@@ -1,6 +1,7 @@
 <template>
     <header class="header">
-        <h2>HEADER</h2>
+        <!-- color:  arg, delay: modified -->
+        <h2 v-bg:color.delay="'red'">{{ $t("header.HEADER") }}</h2>
     </header>
 </template>
 
