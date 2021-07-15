@@ -16,17 +16,16 @@
 </template>
 
 <script>
+import { localeChanged } from "vee-validate";
 import i18n from "../i18n";
 export default {
     name: "Footer",
     data() {
         return {
-            select: JSON.parse(localStorage.getItem("i18n")) || "vi",
+            select: JSON.parse(localStorage.getItem("i18n")) || "en",
         };
     },
-    beforeMount() {
-        this.changeLocale(JSON.parse(localStorage.getItem("i18n")) || "vi");
-    },
+
     computed: {
         caculator() {
             return this.select + "ok";
@@ -36,6 +35,8 @@ export default {
     methods: {
         changeLocale(locale) {
             i18n.locale = locale;
+            //update locale vee validate
+            localeChanged();
             localStorage.setItem("i18n", JSON.stringify(this.select));
         },
     },
@@ -50,7 +51,6 @@ export default {
     },
 };
 </script>
-
 <style scoped>
 .footer {
     text-align: center;

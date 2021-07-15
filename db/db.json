@@ -3,16 +3,17 @@
     {
       "id": "1",
       "userName": "admin",
-      "password": "123456"
+      "password": "123456",
+      "rules":"admin"
+    },
+    {
+      "id": "2",
+      "userName": "user",
+      "password": "123456",
+      "rules":"user"
     }
   ],
   "todos": [
-    {
-      "title": "1",
-      "completed": true,
-      "price": 1000,
-      "id": 1
-    },
     {
       "title": "2",
       "completed": true,
@@ -32,16 +33,22 @@
       "id": 4
     },
     {
-      "title": "5",
-      "completed": false,
-      "price": 100000,
-      "id": 5
-    },
-    {
       "title": "6",
       "completed": false,
       "price": 1000,
       "id": 6
+    },
+    {
+      "title": "Ok",
+      "completed": false,
+      "price": 2,
+      "id": 7
+    },
+    {
+      "title": "Ok roi nhe",
+      "completed": false,
+      "price": 1000,
+      "id": 8
     }
   ]
 }

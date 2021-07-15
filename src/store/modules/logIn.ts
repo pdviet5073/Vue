@@ -1,22 +1,26 @@
 import axios from "axios"
-
+import {  ActionContext, MutationTree,ActionTree, GetterTree } from 'vuex';
+import {  Commit} from 'vuex';
+import { user} from '../../types'
+import {UserState, RootState} from '../state'
 const baseUrl = " http://localhost:3000/user";
-const LoginModule ={
-    state:{
-        dataUser:{ },
+
+
+ type UserContext = ActionContext<UserState,RootState>
+
+  const state:UserState={
+        dataUser:{},
         register:{}
+    }
 
-    },
+    const  getters:GetterTree<UserState, RootState>= {
 
-    getters: {
-
-    },
-
-    actions:{
-        async logIn({commit}, payload){
+    }
+    const  actions:ActionTree<UserState, RootState>={
+        async logIn({commit}: UserContext, payload:user){
             try {
                 const {userName, password} =payload
-                const response = await axios.get(`${baseUrl}?userName=${userName}`)
+                const response= await axios.get(`${baseUrl}?userName=${userName}`)
                 const data = response.data
                 if(data[0].password === password){
                     commit("LOGIN_SUCCESS",response.data[0])
@@ -28,7 +32,7 @@ const LoginModule ={
                 console.log(error)
             }
         },
-        async register({commit}, payload){
+        async register({commit}: UserContext, payload:user){
             try {
                 const response = await axios.post(`${baseUrl}`, payload)
                 commit("REGISTER",response.data[0])
@@ -37,21 +41,26 @@ const LoginModule ={
                 console.log(error)
             }
         }
-    },
+    }
 
-    mutations: {
+    const mutations:MutationTree<UserState>= {
         
-        LOGIN_SUCCESS(state,infoUser){
+        LOGIN_SUCCESS(state:UserState,infoUser:user){
             state.dataUser= infoUser
         },
-        LOGIN_FAIL(state,infoUser){
+        LOGIN_FAIL(state: UserState,infoUser:any){
             state.dataUser= infoUser
         },
-        REGISTER(state,infoUser){
+        REGISTER(state:UserState,infoUser:user){
             state.register= infoUser
         },
         
-    },
-}
+    }
 
-export default LoginModule 
+
+export default  {
+    state,
+    getters,
+    mutations,
+    actions
+}

@@ -1,21 +1,23 @@
 import axios from "axios"
-
+import {  ActionContext,MutationTree,ActionTree, GetterTree } from 'vuex';
+import {todo} from "../../types"
+import {RootState, TodoState} from "../state";
 const baseUrl = " http://localhost:3000/todos";
-const todoModule ={
-    state:{
+
+    type TodoContext = ActionContext<TodoState,RootState>
+
+   const state:TodoState = {
         todoData:[],
         todoDetail:{}
-    },
+    }
 
-    getters: {
-        todos: state => state.todoData,
-        todoDone: state => state.todoData.filter(todo =>todo.completed),
-        
+    const getters: GetterTree<TodoState, RootState>= {
+        todos: (state:TodoState) => state.todoData,
+        todoDone: (state:TodoState)  => state.todoData.filter(todo =>todo.completed),
+    }
 
-    },
-
-    actions:{
-       async getTodo({commit}, payload){
+   const actions:ActionTree<TodoState, RootState> ={
+       async getTodo({commit}: TodoContext, payload:any){
             try {
                 const {completed} = payload
                 const response = await axios({
@@ -33,7 +35,7 @@ const todoModule ={
             }
         }
         ,
-        async addTodo({commit}, newTodo){
+        async addTodo({commit}: TodoContext, newTodo:todo){
             try {
                 const response = await axios.post(`${baseUrl}`,newTodo)
                 commit("ADD_TODO",response.data)
@@ -41,7 +43,7 @@ const todoModule ={
                 console.log(error)
             }
         },
-        async markTodo({commit}, todo){
+        async markTodo({commit}: TodoContext, todo:todo){
             try {
                 const {id, completed} = todo
                 const response = await axios.patch(`${baseUrl}/${id}`, {completed: !completed})
@@ -50,7 +52,7 @@ const todoModule ={
                 console.log(error)
             }
         },
-        async updateTodo({commit}, todo){
+        async updateTodo({commit}: TodoContext, todo:todo){
             try {
                 const {id, title} = todo
                 const response = await axios.patch(`${baseUrl}/${id}`, {title})
@@ -60,7 +62,7 @@ const todoModule ={
             }
         }
         ,
-        async deleteTodo({commit}, todoId){
+        async deleteTodo({commit}: TodoContext, todoId:Number){
             try {
              await axios.delete(`${baseUrl}/${todoId}`)
                 commit("DELETE_TODO",todoId)
@@ -68,7 +70,7 @@ const todoModule ={
                 console.log(error)
             }
         },
-        async getTodoDetail({commit}, id){
+        async getTodoDetail({commit}: TodoContext, id:Number){
             try {
                 const response = await axios.get(`${baseUrl}/${id}`)
                 commit("GET_TODO_DETAIL",response.data)
@@ -77,36 +79,41 @@ const todoModule ={
             }
         }
 
-    },
+    }
 
-    mutations: {
-        GET_TODO(state, todo){
+  const  mutations: MutationTree<TodoState>= {
+        GET_TODO(state: TodoState, todo:Array<todo>){
             state.todoData = todo
         },
-        ADD_TODO(state, newTodo){
+        ADD_TODO(state: TodoState, newTodo:todo){
             state.todoData.unshift(newTodo)
         },
-        MARK_TODO(state, todo){
+        MARK_TODO(state: TodoState, todo:todo){
             const tempTodo = JSON.parse(JSON.stringify(state.todoData))
-            const index =tempTodo.findIndex(item =>item.id===todo.id)
+            const index =tempTodo.findIndex((item:todo) =>item.id===todo.id)
            tempTodo.splice(index, 1, todo)
             state.todoData = tempTodo
         },
-        UPDATE_TODO(state, todoUpdate){
+        UPDATE_TODO(state: TodoState, todoUpdate:todo){
             const tempTodo = JSON.parse(JSON.stringify(state.todoData))
-            const index =tempTodo.findIndex(item =>item.id===todoUpdate.id)
+            const index =tempTodo.findIndex((item: todo) =>item.id===todoUpdate.id)
            tempTodo.splice(index, 1, todoUpdate)
             state.todoData = tempTodo
         },
-        DELETE_TODO(state, todoId){
+        DELETE_TODO(state: TodoState, todoId:Number){
             const index =state.todoData.findIndex(item =>item.id===todoId)
             state.todoData.splice(index, 1)
         },
-        GET_TODO_DETAIL(state, todoDetail){
+        GET_TODO_DETAIL(state: TodoState, todoDetail:todo){
             state.todoDetail = {...todoDetail}
         }
 
-    },
-}
+    }
 
-export default todoModule
+
+export default {
+    state,
+  getters,
+  mutations,
+  actions
+}

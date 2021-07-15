@@ -24,7 +24,7 @@
                             :checked="todo.completed"
                             @change="markTodo({ id: todo.id, completed: todo.completed })"
                         />
-                        <span> {{ todo.title }}</span>
+                        <span> {{ todo.title | toUppercase }}</span>
                     </div>
                     <div class="todo__item--btn">
                         <button
@@ -50,20 +50,23 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from "vue";
 import TodoForm from "./TodoForm.vue";
 import TodoSuccess from "./TodoSuccess.vue";
-
+// import { todos } from "../mixins/todoMinxin";
+import { todo } from "../types";
 // import Modal from "./Modal.vue";
 
-import { mapActions, mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
-export default {
-    name: "Todo",
+export const TodoLayout = Vue.extend({
+    // mixins: [todos],
     components: {
         TodoForm,
         TodoSuccess,
     },
+
     data() {
         return {
             selectTodoUpdate: 0,
@@ -73,12 +76,21 @@ export default {
             completed: false,
         };
     },
+
+    filters: {
+        toUppercase(value: string) {
+            return value.toUpperCase();
+        },
+    },
+
     computed: mapGetters(["todos", "todoDone"]),
+
     created() {
         setTimeout(() => {
             this.isLoading = true;
         }, 1000);
     },
+
     mounted() {
         this.getTodo({});
         this.isLoading = false;
@@ -86,6 +98,18 @@ export default {
 
     methods: {
         ...mapActions(["getTodo", "addTodo", "markTodo", "deleteTodo"]),
+        addToCart(data: todo) {
+            const local = localStorage.getItem("cart") as string;
+            const cartData = JSON.parse(local) || [];
+            if (cartData) {
+                const indexTodo = cartData.findIndex((item: todo) => item.id === data.id);
+                if (indexTodo != -1) {
+                    const todo = cartData.find((item: todo) => item.id === data.id);
+                    cartData.splice(indexTodo, 1, { ...todo, count: todo.count + 1 });
+                } else cartData.push({ ...data, count: 1 });
+            } else cartData.push({ ...data, count: 1 });
+            localStorage.setItem("cart", JSON.stringify([...cartData]));
+        },
         handleReset() {
             this.title = "";
         },
@@ -93,25 +117,14 @@ export default {
             this.selectTodoUpdate = 0;
             this.title = "";
         },
-        setTitle(title) {
+        setTitle(title: string) {
             this.title = title;
         },
-        setPrice(price) {
+        setPrice(price: string) {
             this.price = parseInt(price);
         },
-        setSelectTodoUpdate(value) {
+        setSelectTodoUpdate(value: number) {
             this.selectTodoUpdate = value;
-        },
-        addToCart(data) {
-            const cartData = JSON.parse(localStorage.getItem("cart")) || [];
-            if (cartData) {
-                const indexTodo = cartData.findIndex((item) => item.id === data.id);
-                if (indexTodo != -1) {
-                    const todo = cartData.find((item) => item.id === data.id);
-                    cartData.splice(indexTodo, 1, { ...todo, count: todo.count + 1 });
-                } else cartData.push({ ...data, count: 1 });
-            } else cartData.push({ ...data, count: 1 });
-            localStorage.setItem("cart", JSON.stringify([...cartData]));
         },
     },
     watch: {
@@ -119,11 +132,12 @@ export default {
             this.getTodo({ completed: this.completed });
         },
     },
-};
+});
 </script>
 
 <style scoped lang="scss">
 .todo {
+    height: 5000px;
     a {
         color: #fff;
         text-decoration: none;

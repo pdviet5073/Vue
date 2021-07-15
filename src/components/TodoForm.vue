@@ -10,15 +10,11 @@
     </form>
 </template>
 
-<script>
+<script lang="ts">
 import { mapActions } from "vuex";
 
 export default {
     name: "TodoForm",
-
-    data() {
-        return {};
-    },
 
     props: {
         selectTodoUpdate: Number,
@@ -33,19 +29,18 @@ export default {
     methods: {
         ...mapActions(["addTodo", "updateTodo"]),
 
-        handleAddOrUpdateTodo(e) {
+        handleAddOrUpdateTodo(e: Event) {
             e.preventDefault();
             if (!this.selectTodoUpdate) {
-                this.title &&
-                    this.addTodo({ title: this.title, completed: false, price: parseInt(this.price) });
-                this.setTitle("");
+                this.title && this.addTodo({ title: this.title, completed: false, price: this.price });
+                this.setTitle(" ");
                 this.setPrice(0);
             } else {
                 this.title &&
                     this.updateTodo({
                         title: this.title,
                         id: this.selectTodoUpdate,
-                        price: parseInt(this.price),
+                        price: this.price,
                     });
                 this.setTitle("");
                 this.setPrice(0);

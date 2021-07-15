@@ -1,5 +1,13 @@
 {
   "header": {
     "HEADER": "HEADER"
+  },
+  "fields": {
+    "password": "password",
+    "user name":"User name",
+    "Phone":"phone"
+  },
+  "messages":{
+    "Phone": "This {_field_} is invalid"
   }
 }

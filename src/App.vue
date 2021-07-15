@@ -1,27 +1,16 @@
 <template>
     <div id="app">
-        <DefaultLayout>
-            <router-view />
-        </DefaultLayout>
+        <component :is="$route.meta.layout || 'div'">
+            <transition name="faded-in">
+                <router-view />
+            </transition>
+        </component>
     </div>
 </template>
 
 <script>
-import DefaultLayout from "./layouts/DefaultLayout.vue";
-import { extend } from "vee-validate";
-import * as rules from "vee-validate/dist/rules";
-import { messages } from "vee-validate/dist/locale/en.json";
-
-Object.keys(rules).forEach((rule) => {
-    extend(rule, {
-        ...rules[rule], // copies rule configuration
-        message: messages[rule], // assign message
-    });
-});
-
 export default {
     name: "App",
-    components: { DefaultLayout },
 };
 </script>
 
@@ -57,5 +46,11 @@ export default {
             border: 1px #045929 solid;
         }
     }
+}
+.faded-in-enter {
+    opacity: 0;
+}
+.faded-in-enter-active {
+    transition: opacity 0.5s ease-in-out;
 }
 </style>

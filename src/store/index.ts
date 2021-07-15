@@ -1,20 +1,16 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-
-import todos from "./modules/todos"
+import todo from "./modules/todo"
 import logIn from "./modules/logIn"
-
-
 
 Vue.use(Vuex)
 
-
 const store = new Vuex.Store({
+    strict: process.env.NODE_ENV !== 'production',
     modules:{
-        todos,
+        todo,
         logIn
     },
-    namespace: true
 })
 
 export default store

@@ -1,54 +1,35 @@
 <template>
     <div class="login">
-        <ValidationObserver ref="form" v-slot="{ invalid, handleSubmit }" slim>
+        <ValidationObserver ref="form" v-slot="{ handleSubmit }" slim>
             <b-form @submit.prevent="handleSubmit(onSubmit)" @reset="onReset">
-                <ValidationProvider tag="div" name="userName" rules="required" v-slot="{ errors, valid }">
-                    <CustomInput
-                        label="User name:"
-                        labelFor="userName"
-                        :value="initialValue.userName"
-                        @input="initialValue.userName = $event"
-                        type="text"
-                        :errors="errors"
-                        :valid="valid"
-                        placeholder="User name"
-                    />
-                </ValidationProvider>
-                <ValidationProvider
-                    tag="div"
+                <CustomInput
+                    name="user name"
+                    rules="required"
+                    label="User name:"
+                    labelFor="userName"
+                    v-model="initialValue.userName"
+                    type="text"
+                    placeholder="User name"
+                />
+                <CustomInput
                     name="Phone"
                     rules="required|phoneNumber"
-                    v-slot="{ errors, valid }"
-                >
-                    <CustomInput
-                        label="Phone Number:"
-                        labelFor="phone"
-                        :value="initialValue.phone"
-                        @input="initialValue.phone = $event"
-                        type="text"
-                        :errors="errors"
-                        :valid="valid"
-                    />
-                </ValidationProvider>
+                    label="Phone Number:"
+                    labelFor="phone"
+                    v-model="initialValue.phone"
+                    type="text"
+                />
 
-                <ValidationProvider
-                    tag="div"
+                <CustomInput
                     name="password"
                     rules="required|min:6"
-                    v-slot="{ errors, valid }"
-                >
-                    <CustomInput
-                        label="Password:"
-                        labelFor="password"
-                        :value="initialValue.password"
-                        @input="initialValue.password = $event"
-                        type="password"
-                        :errors="errors"
-                        :valid="valid"
-                    />
-                </ValidationProvider>
+                    label="Password:"
+                    labelFor="password"
+                    v-model="initialValue.password"
+                    type="password"
+                />
                 <div>
-                    <b-button type="submit" variant="primary" :disabled="invalid">Submit</b-button>
+                    <b-button type="submit" variant="primary">Submit</b-button>
                     <b-button type="reset" variant="danger">Reset</b-button>
                 </div>
                 <p v-if="auth">{{ auth.userName }}</p>
@@ -60,14 +41,16 @@
 <script>
 import { mapActions, mapState } from "vuex";
 import CustomInput from "./CustomInput.vue";
-import { extend, ValidationProvider, ValidationObserver } from "vee-validate";
+import i18n from "../i18n";
+import { extend, ValidationObserver } from "vee-validate";
+import { toast } from "../mixins/toast";
 
 extend("phoneNumber", {
     validate: (value) => {
         const regex = /(84|0[3|5|7|8|9])+([0-9]{8})\b/g;
         return regex.test(value);
     },
-    message: "This {_field_} is invalid",
+    message: i18n.t("messages.Phone"),
 });
 
 export default {
@@ -81,8 +64,8 @@ export default {
             },
         };
     },
+    mixins: [toast],
     components: {
-        ValidationProvider,
         ValidationObserver,
         CustomInput,
     },
@@ -101,7 +84,7 @@ export default {
                 password: password,
                 phone: phone,
             });
-            this.onReset();
+            this.$refs.form.reset();
         },
         onReset() {
             // Reset our form values
@@ -112,7 +95,7 @@ export default {
     },
     watch: {
         auth() {
-            this.$router.push("todo");
+            this.$router.push("/todo");
         },
     },
 };

@@ -1,5 +1,13 @@
 {
   "header": {
     "HEADER": "VẪN LÀ HEADER"
+  },
+  "fields": {
+    "password": "Mật khẩu",
+    "user name":"Tên đăng nhập",
+    "Phone":"Số điện thoại"
+  },
+  "messages":{
+    "Phone": " Số điện thoại không đúng"
   }
 }
