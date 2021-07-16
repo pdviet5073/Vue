@@ -11,44 +11,43 @@
 </template>
 
 <script lang="ts">
-import { mapActions } from "vuex";
+import Vue from "vue";
+import { Component, Prop } from "vue-property-decorator";
+import { Action } from "vuex-class";
+// import { todoType } from "../types";
 
-export default {
-    name: "TodoForm",
+@Component({})
+export default class TodoForm extends Vue {
+    @Prop(Number) selectTodoUpdate!: number;
+    @Prop(String) title!: string;
+    @Prop(Number) price!: number;
+    @Prop(Function) setTitle!: Function;
+    @Prop(Function) setSelectTodoUpdate!: Function;
+    @Prop(Function) setPrice!: Function;
 
-    props: {
-        selectTodoUpdate: Number,
-        title: String,
-        price: Number,
-        setTitle: Function,
-        setSelectTodoUpdate: Function,
-        setPrice: Function,
-    },
-    created() {},
+    @Action("todo/addTodo") readonly addTodo!: Function;
 
-    methods: {
-        ...mapActions(["addTodo", "updateTodo"]),
+    @Action("todo/updateTodo") updateTodo!: Function;
 
-        handleAddOrUpdateTodo(e: Event) {
-            e.preventDefault();
-            if (!this.selectTodoUpdate) {
-                this.title && this.addTodo({ title: this.title, completed: false, price: this.price });
-                this.setTitle(" ");
-                this.setPrice(0);
-            } else {
-                this.title &&
-                    this.updateTodo({
-                        title: this.title,
-                        id: this.selectTodoUpdate,
-                        price: this.price,
-                    });
-                this.setTitle("");
-                this.setPrice(0);
-                this.setSelectTodoUpdate(0);
-            }
-        },
-    },
-};
+    handleAddOrUpdateTodo(e: Event) {
+        e.preventDefault();
+        if (!this.selectTodoUpdate) {
+            this.title && this.addTodo({ title: this.title, completed: false, price: this.price });
+            this.setTitle(" ");
+            this.setPrice(0);
+        } else {
+            this.title &&
+                this.updateTodo({
+                    title: this.title,
+                    id: this.selectTodoUpdate,
+                    price: this.price,
+                });
+            this.setTitle("");
+            this.setPrice(0);
+            this.setSelectTodoUpdate(0);
+        }
+    }
+}
 </script>
 
 <style lang="scss" scoped>

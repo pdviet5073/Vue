@@ -9,12 +9,12 @@ Vue.use(VueRouter);
 
 
 const routes: Array<RouteConfig> = [
-    // {
-    //     path: "/login",
-    //     name: "Login",
-    //     component: ()=> import("../components/Login.vue"),
-    //     meta: { layout: DefaultLayout },
-    // },
+    {
+        path: "/login",
+        name: "Login",
+        component: ()=> import("../components/Login.vue"),
+        meta: { layout: DefaultLayout },
+    },
     {
         path: "/",
         name: "ToDo",
@@ -63,23 +63,23 @@ const router = new VueRouter({
     },
 });
 
-router.beforeEach((to, from, next) => {
-    const authRequired :Boolean = to.matched.some((x) => x.meta.requiresAuth);
-    const isAdmin: Boolean = to.matched.some((x) => x.meta.isAdmin);
-    const local = localStorage.getItem("auth") as string
-    const loggedIn: user = JSON.parse(local);
-    if (!loggedIn) {
-        if (authRequired) {
-            return next("/login");
-        }
-        else next();
-    } else {
-        if (to.path == "/login") return next("/");
+// router.beforeEach((to, from, next) => {
+//     const authRequired :Boolean = to.matched.some((x) => x.meta.requiresAuth);
+//     const isAdmin: Boolean = to.matched.some((x) => x.meta.isAdmin);
+//     const local = localStorage.getItem("auth") as string
+//     const loggedIn: user = JSON.parse(local);
+//     if (!loggedIn) {
+//         if (authRequired) {
+//             return next("/login");
+//         }
+//         else next();
+//     } else {
+//         if (to.path == "/login") return next("/");
 
-        if (authRequired && isAdmin) {
-            if (loggedIn?.rules === "admin") next();
-            else next("/");
-        } else next();
-    }
-});
+//         if (authRequired && isAdmin) {
+//             if (loggedIn?.rules === "admin") next();
+//             else next("/");
+//         } else next();
+//     }
+// });
 export default router;

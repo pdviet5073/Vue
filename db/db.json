@@ -4,13 +4,13 @@
       "id": "1",
       "userName": "admin",
       "password": "123456",
-      "rules":"admin"
+      "rules": "admin"
     },
     {
       "id": "2",
       "userName": "user",
       "password": "123456",
-      "rules":"user"
+      "rules": "user"
     }
   ],
   "todos": [
@@ -40,15 +40,39 @@
     },
     {
       "title": "Ok",
-      "completed": false,
+      "completed": true,
       "price": 2,
       "id": 7
     },
     {
       "title": "Ok roi nhe",
-      "completed": false,
+      "completed": true,
       "price": 1000,
       "id": 8
+    },
+    {
+      "title": "123123123",
+      "completed": true,
+      "price": 0,
+      "id": 9
+    },
+    {
+      "title": "12312312",
+      "completed": false,
+      "price": 0,
+      "id": 10
+    },
+    {
+      "title": "okl",
+      "completed": false,
+      "price": 54,
+      "id": 11
+    },
+    {
+      "title": "r4",
+      "completed": false,
+      "price": 5,
+      "id": 12
     }
   ]
 }

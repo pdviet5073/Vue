@@ -1,12 +1,12 @@
-import {todo, user} from "../types"
+import {todoType, user} from "../types"
 
 export interface ModuleState {
 }
 
 
 export interface TodoState extends ModuleState{
-    todoData: todo[],
-    todoDetail: todo,
+    todoData: todoType[],
+    todoDetail: todoType,
 }
 
 export interface UserState extends ModuleState{

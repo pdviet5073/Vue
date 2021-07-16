@@ -1,14 +1,14 @@
-export  interface todo{
-    id?:Number,
-    title?:String,
-    completed?:Boolean,
-    price?: Number,
-    count?:Number,
+export  interface todoType{
+    id?:number,
+    title?:string,
+    completed?:boolean,
+    price?: number,
+    count?:number,
 }
 
 export  interface user {
-    userName?:String, 
-    password?:String,
-    rules?: String,
-    phone?:String,
+    userName?:string, 
+    password?:string,
+    rules?: string,
+    phone?:string,
 }

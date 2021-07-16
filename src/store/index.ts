@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import todo from "./modules/todo"
-import logIn from "./modules/logIn"
+import logIn from "./modules/login/logIn"
 
 Vue.use(Vuex)
 

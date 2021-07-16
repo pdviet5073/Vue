@@ -38,67 +38,74 @@
     </div>
 </template>
 
-<script>
-import { mapActions, mapState } from "vuex";
+<script lang="ts">
 import CustomInput from "./CustomInput.vue";
-import i18n from "../i18n";
+import i18n from "../plugins/i18n";
+import { Component, Watch } from "vue-property-decorator";
 import { extend, ValidationObserver } from "vee-validate";
-import { toast } from "../mixins/toast";
+import Vue from "vue";
+import { Action, State } from "vuex-class";
+import { user } from "@/types";
+// import { toast } from "../mixins/toast";
+
+interface initialValue {
+    userName: string | null;
+    password: string | null;
+    phone: string | null;
+}
 
 extend("phoneNumber", {
-    validate: (value) => {
+    validate: (value): boolean => {
         const regex = /(84|0[3|5|7|8|9])+([0-9]{8})\b/g;
         return regex.test(value);
     },
-    message: i18n.t("messages.Phone"),
+    message: i18n.t("messages.Phone") as string,
 });
 
-export default {
-    name: "login",
-    data() {
-        return {
-            initialValue: {
-                userName: null,
-                password: null,
-                phone: null,
-            },
-        };
-    },
-    mixins: [toast],
+@Component({
     components: {
         ValidationObserver,
         CustomInput,
     },
-    computed: mapState({
-        auth: (state) => state.logIn.dataUser,
-    }),
-    methods: {
-        ...mapActions(["logIn", "register"]),
+})
+export default class Login extends Vue {
+    initialValue: initialValue = {
+        userName: null,
+        password: null,
+        phone: null,
+    };
 
-        onSubmit(e) {
-            console.log(this.initialValue, e);
+    @State((state) => state.logIn.dataUser) auth!: user;
 
-            const { userName, password, phone } = this.initialValue;
-            this.logIn({
-                userName: userName,
-                password: password,
-                phone: phone,
-            });
+    @Action("logIn/logIn") logIn!: Function;
+    @Action("logIn/register") register!: Function;
+
+    $refs!: {
+        form: HTMLFormElement;
+    };
+
+    onSubmit(e: Event): void {
+        console.log(this.initialValue, e);
+
+        const { userName, password, phone } = this.initialValue;
+        this.logIn({
+            userName: userName,
+            password: password,
+            phone: phone,
+        });
+        this.$refs.form.reset();
+    }
+    onReset(): void {
+        // Reset our form values
+        this.$nextTick(() => {
             this.$refs.form.reset();
-        },
-        onReset() {
-            // Reset our form values
-            this.$nextTick(() => {
-                this.$refs.form.reset();
-            });
-        },
-    },
-    watch: {
-        auth() {
-            this.$router.push("/todo");
-        },
-    },
-};
+        });
+    }
+    @Watch("auth")
+    handleChaneAuth() {
+        this.$router.push("/todo");
+    }
+}
 </script>
 
 <style lang="scss">

@@ -4,7 +4,7 @@
             Done
             <router-link :to="'/cart'">Cart</router-link>
         </h3>
-        <p>Total price: {{ totalPrice() }}</p>
+        <!-- <p>Total price: {{ totalPrice() }}</p> -->
         <ul>
             <li v-for="todo in todoDone" :key="todo.id">{{ todo.title }} - {{ todo.price }}</li>
         </ul>
@@ -15,25 +15,24 @@
     </div>
 </template>
 
-<script>
-import { mapGetters } from "vuex";
+<script lang="ts">
+import { todoType } from "@/types";
+import Vue from "vue";
+import { Getter } from "vuex-class";
+import { Component } from "vue-property-decorator";
 
-export default {
-    name: "TodoDone",
-    data() {
-        return {
-            show: true,
-        };
-    },
-    computed: mapGetters(["todoDone"]),
-    methods: {
-        totalPrice() {
-            return this.todoDone.reduce((total, current) => {
-                return total + current.price;
-            }, 0);
-        },
-    },
-};
+@Component
+export default class TodoDone extends Vue {
+    show: boolean = true;
+
+    @Getter("todo/todoDone") todoDone!: todoType[];
+
+    // totalPrice(): number {
+    //     return this.todoDone.reduce((total: number, current) => {
+    //         return total + current.price;
+    //     }, 0);
+    // }
+}
 </script>
 
 <style lang="scss" scoped>

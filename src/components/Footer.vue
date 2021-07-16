@@ -15,41 +15,33 @@
     </footer>
 </template>
 
-<script>
+<script lang="ts">
 import { localeChanged } from "vee-validate";
-import i18n from "../i18n";
-export default {
-    name: "Footer",
-    data() {
-        return {
-            select: JSON.parse(localStorage.getItem("i18n")) || "en",
-        };
-    },
+import Vue from "vue";
+import i18n from "../plugins/i18n";
+import { Component, Watch } from "vue-property-decorator";
 
-    computed: {
-        caculator() {
-            return this.select + "ok";
-        },
-    },
+@Component
+export default class Footer extends Vue {
+    i18nLocal = localStorage.getItem("i18n") as string;
+    select: string = JSON.parse(this.i18nLocal) || "en";
 
-    methods: {
-        changeLocale(locale) {
-            i18n.locale = locale;
-            //update locale vee validate
-            localeChanged();
-            localStorage.setItem("i18n", JSON.stringify(this.select));
-        },
-    },
-    watch: {
-        select: {
-            // dùng deep và handler trong trường hợp theo dõi mảng hoặc object
-            handler() {
-                this.changeLocale(this.select);
-            },
-            deep: true,
-        },
-    },
-};
+    get caculator(): string {
+        return this.select + "ok";
+    }
+
+    changeLocale(locale: string) {
+        i18n.locale = locale;
+        //update locale vee validate
+        localeChanged();
+        localStorage.setItem("i18n", JSON.stringify(this.select));
+    }
+    @Watch("select", { deep: true })
+    handleChaneSelect() {
+        // dùng deep và handler trong trường hợp theo dõi mảng hoặc object
+        this.changeLocale(this.select);
+    }
+}
 </script>
 <style scoped>
 .footer {

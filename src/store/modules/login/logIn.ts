@@ -1,10 +1,9 @@
 import axios from "axios"
 import {  ActionContext, MutationTree,ActionTree, GetterTree } from 'vuex';
-import {  Commit} from 'vuex';
-import { user} from '../../types'
-import {UserState, RootState} from '../state'
-const baseUrl = " http://localhost:3000/user";
+import { user} from '../../../types'
+import {UserState, RootState} from '../../state'
 
+const baseUrl = " http://localhost:3000/user";
 
  type UserContext = ActionContext<UserState,RootState>
 
@@ -32,6 +31,7 @@ const baseUrl = " http://localhost:3000/user";
                 console.log(error)
             }
         },
+
         async register({commit}: UserContext, payload:user){
             try {
                 const response = await axios.post(`${baseUrl}`, payload)
@@ -48,9 +48,11 @@ const baseUrl = " http://localhost:3000/user";
         LOGIN_SUCCESS(state:UserState,infoUser:user){
             state.dataUser= infoUser
         },
+
         LOGIN_FAIL(state: UserState,infoUser:any){
             state.dataUser= infoUser
         },
+
         REGISTER(state:UserState,infoUser:user){
             state.register= infoUser
         },
@@ -58,9 +60,12 @@ const baseUrl = " http://localhost:3000/user";
     }
 
 
-export default  {
+const logIn ={
     state,
     getters,
     mutations,
-    actions
+    actions,
+  namespaced: true,
+
 }
+export default logIn

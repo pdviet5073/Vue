@@ -23,6 +23,7 @@
     "vue-property-decorator": "^9.1.2",
     "vue-router": "^3.0.1",
     "vuex": "^3.6.0",
+    "vuex-class": "^0.3.2",
     "yup": "^0.32.9"
   },
   "devDependencies": {
