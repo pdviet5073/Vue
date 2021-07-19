@@ -1,8 +1,7 @@
 import { getters } from "./getters";
 import { actions } from "./actions";
 import { mutations } from "./mutations";
-import {  Module} from 'vuex';
-import { RootState, TodoState } from "../../state";
+import {  TodoState } from "../../state";
 
 const state: TodoState = {
     todoData: [],

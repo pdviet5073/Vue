@@ -27,8 +27,8 @@ const languages: any = {
 const messages = Object.assign(languages)
   
 const i18n = new VueI18n({
-    locale:   "en", // set locale
-    fallbackLocale: "en", // set fallback locale
+    locale:  JSON.parse(localStorage.getItem("i18n")!)|| "en", // set locale
+    fallbackLocale: JSON.parse(localStorage.getItem("i18n")!)|| "en", // set fallback locale
     messages, // set locale messages
 });
 export default i18n;

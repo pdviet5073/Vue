@@ -62,7 +62,7 @@ export const actions:ActionTree<TodoState, RootState> ={
          }
      },
 
-     async getTodoDetail({commit}: TodoContext, id:Number){
+     async getTodoDetail({commit}: TodoContext, id:string){
          try {
              const response = await axios.get(`${baseUrl}/${id}`)
              commit("GET_TODO_DETAIL",response.data)

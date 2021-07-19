@@ -27,11 +27,11 @@ export default class TodoDone extends Vue {
 
     @Getter("todo/todoDone") todoDone!: todoType[];
 
-    // totalPrice(): number {
-    //     return this.todoDone.reduce((total: number, current) => {
-    //         return total + current.price;
-    //     }, 0);
-    // }
+    totalPrice(): number {
+        return this.todoDone.reduce((total: number, current) => {
+            return total + current.price!;
+        }, 0);
+    }
 }
 </script>
 

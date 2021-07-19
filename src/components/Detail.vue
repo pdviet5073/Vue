@@ -1,41 +1,34 @@
 <template>
     <div class="detail">
-        <div>{{ detail.id }}-{{ detail.title }}-{{ detail.price }}</div>
+        <div>{{ todoDetail.id }}-{{ todoDetail.title }}-{{ todoDetail.price }}</div>
         <button>
             <router-link :to="{ path: `/todo/3` }">next</router-link>
         </button>
     </div>
 </template>
 
-<script>
-import { mapState, mapActions } from "vuex";
-export default {
-    name: "TodoDetail",
-    data() {
-        return {
-            bgc: "#ccc",
-        };
-    },
+<script lang="ts">
+import { Vue, Component, Watch } from "vue-property-decorator";
+import { Action, State } from "vuex-class";
+import { todoType } from "../types";
+
+@Component
+export default class TodoDetail extends Vue {
+    bgc: string = "#ccc";
+
+    @State((state) => state.todo.todoDetail) todoDetail!: todoType;
+
+    @Action("todo/getTodoDetail") getTodoDetail!: Function;
 
     mounted() {
         this.getTodoDetail(this.$route.params.id);
-    },
+    }
 
-    computed: {
-        ...mapState({
-            detail: (state) => state.todos.todoDetail,
-        }),
-    },
-
-    methods: {
-        ...mapActions(["getTodoDetail"]),
-    },
-    watch: {
-        $route() {
-            this.getTodoDetail(this.$route.params.id);
-        },
-    },
-};
+    @Watch("$route")
+    handleChangeRoute() {
+        this.getTodoDetail(this.$route.params.id);
+    }
+}
 </script>
 
 <style scoped>

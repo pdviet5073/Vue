@@ -17,15 +17,24 @@
     </ValidationProvider>
 </template>
 
-<script>
+<script lang="ts">
+import { Vue, Component, Prop } from "vue-property-decorator";
 import { ValidationProvider } from "vee-validate";
-export default {
-    name: "CustomInput",
-    props: ["label", "labelFor", "value", "type", "placeholder", "rules", "name"],
+
+@Component({
     components: {
         ValidationProvider,
     },
-};
+})
+export default class CustomInput extends Vue {
+    @Prop() label!: string;
+    @Prop() labelFor!: string;
+    @Prop() value!: string;
+    @Prop() type!: string;
+    @Prop() placeholder!: string;
+    @Prop() rules!: string;
+    @Prop() name!: string;
+}
 </script>
 
 <style></style>

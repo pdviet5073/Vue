@@ -23,8 +23,7 @@ import { Component, Watch } from "vue-property-decorator";
 
 @Component
 export default class Footer extends Vue {
-    i18nLocal = localStorage.getItem("i18n") as string;
-    select: string = JSON.parse(this.i18nLocal) || "en";
+    select: string = JSON.parse(localStorage.getItem("i18n")!) || "en";
 
     get caculator(): string {
         return this.select + "ok";

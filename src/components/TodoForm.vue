@@ -18,12 +18,12 @@ import { Action } from "vuex-class";
 
 @Component({})
 export default class TodoForm extends Vue {
-    @Prop(Number) selectTodoUpdate!: number;
-    @Prop(String) title!: string;
-    @Prop(Number) price!: number;
-    @Prop(Function) setTitle!: Function;
-    @Prop(Function) setSelectTodoUpdate!: Function;
-    @Prop(Function) setPrice!: Function;
+    @Prop() selectTodoUpdate!: number;
+    @Prop() title!: string;
+    @Prop() price!: number;
+    @Prop() setTitle!: Function;
+    @Prop() setSelectTodoUpdate!: Function;
+    @Prop() setPrice!: Function;
 
     @Action("todo/addTodo") readonly addTodo!: Function;
 

@@ -12,21 +12,21 @@ export  const  mutations: MutationTree<TodoState>= {
     },
 
     MARK_TODO(state: TodoState, todo:todoType){
-        const tempTodo = JSON.parse(JSON.stringify(state.todoData))
-        const index =tempTodo.findIndex((item:todoType) =>item.id===todo.id)
+        const tempTodo: Array<todoType> = JSON.parse(JSON.stringify(state.todoData))
+        const index:number =tempTodo.findIndex((item) =>item.id===todo.id)
        tempTodo.splice(index, 1, todo)
         state.todoData = tempTodo
     },
 
     UPDATE_TODO(state: TodoState, todoUpdate:todoType){
-        const tempTodo = JSON.parse(JSON.stringify(state.todoData))
-        const index =tempTodo.findIndex((item: todoType) =>item.id===todoUpdate.id)
+        const tempTodo: Array<todoType> = JSON.parse(JSON.stringify(state.todoData))
+        const index:number =tempTodo.findIndex((item) =>item.id===todoUpdate.id)
        tempTodo.splice(index, 1, todoUpdate)
         state.todoData = tempTodo
     },
 
     DELETE_TODO(state: TodoState, todoId:Number){
-        const index =state.todoData.findIndex(item =>item.id===todoId)
+        const index: number =state.todoData.findIndex(item =>item.id===todoId)
         state.todoData.splice(index, 1)
     },
 

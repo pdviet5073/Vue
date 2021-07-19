@@ -103,7 +103,7 @@ export default class Login extends Vue {
     }
     @Watch("auth")
     handleChaneAuth() {
-        this.$router.push("/todo");
+        this.$router.push("/");
     }
 }
 </script>

@@ -27,38 +27,39 @@
     </div>
 </template>
 
-<script>
-export default {
-    name: "Cart",
-    data() {
-        return {
-            fields: [
-                "Stt",
-                { key: "id", label: "Key" },
-                "title",
-                { key: "count", label: "So luong" },
-                "price",
-                { key: "total", label: "Tong tien" },
-            ],
-            cartData: JSON.parse(localStorage.getItem("cart")),
-        };
-    },
-    completed: {},
-    methods: {
-        handleChangeCount(value, data) {
-            const tempCart = JSON.parse(JSON.stringify(this.cartData));
-            const indexCart = tempCart.findIndex((item) => item.id === data.id);
-            tempCart.splice(indexCart, 1, { ...data, count: value });
-            this.cartData = JSON.parse(JSON.stringify(tempCart));
-            localStorage.setItem("cart", JSON.stringify(tempCart));
-        },
-        totalPrice() {
-            return this.cartData?.reduce((total, current) => {
-                return (total += current.price * current.count);
-            }, 0);
-        },
-    },
-};
+<script lang="ts">
+import { Vue, Component } from "vue-property-decorator";
+import { todoType } from "../types";
+
+@Component
+export default class Cart extends Vue {
+    name: string = "Cart";
+
+    fields: Array<string | { key: string; label: string }> = [
+        "Stt",
+        { key: "id", label: "Key" },
+        "title",
+        { key: "count", label: "So luong" },
+        "price",
+        { key: "total", label: "Tong tien" },
+    ];
+
+    cartData: todoType[] = JSON.parse(localStorage.getItem("cart")!);
+
+    handleChangeCount(value: string, data: todoType) {
+        const tempCart = JSON.parse(JSON.stringify(this.cartData));
+        const indexCart = tempCart.findIndex((item: todoType) => item.id === data.id);
+        tempCart.splice(indexCart, 1, { ...data, count: value });
+        this.cartData = JSON.parse(JSON.stringify(tempCart));
+        localStorage.setItem("cart", JSON.stringify(tempCart));
+    }
+
+    totalPrice() {
+        return this.cartData?.reduce((total: number, current: todoType) => {
+            return total + current.price! * current.count!;
+        }, 0);
+    }
+}
 </script>
 
 <style scoped lang="scss">

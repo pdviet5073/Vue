@@ -24,7 +24,7 @@
                             :checked="todo.completed"
                             @change="markTodo({ id: todo.id, completed: todo.completed })"
                         />
-                        <span> {{ todo.title }}</span>
+                        <span> {{ todo.title | toUppercase }}</span>
                     </div>
                     <div class="todo__item--btn">
                         <button
@@ -68,12 +68,6 @@ export default class Todo extends todoMixin {
     title: string = "";
     price: number = 0;
     completed: boolean = false;
-
-    // filters: {
-    //     toUppercase(value: string) {
-    //         return value.toUpperCase();
-    //     },
-    // },
 
     //computed/mapGetters
 

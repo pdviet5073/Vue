@@ -5,9 +5,10 @@
 </template>
 
 <script>
-export default {
-    name: "Admin",
-};
+import { Vue, Component } from "vue-property-decorator";
+
+@Component
+export default class Admin extends Vue {}
 </script>
 
 <style></style>
